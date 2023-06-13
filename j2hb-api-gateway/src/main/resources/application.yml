@@ -1,0 +1,75 @@
+spring:
+  cloud:
+    gateway:
+      routes:
+        - id: exam-service
+          uri: http://localhost:8081
+          predicates:
+            - Path=/e/{somenumber}/exams/**
+          filters:
+            - ManagerFilter
+
+        - id: configuration-service
+          uri: http://localhost:8083
+          predicates:
+            - Path=/e/{somenumber}/configurations/**
+          filters:
+            - ManagerFilter
+
+        - id: auth-service
+          uri: http://localhost:8082
+          predicates:
+            - Path=/e/**
+          filters:
+            - AuthenticationFilter
+#        - id: course-service
+#          uri: http://${COURSE_HOST}:${COURSE_PORT}
+#          predicates:
+#            - Path=/cours/**
+#          filters:
+#            - ManagerFilter
+#
+#        - id: candidate-service
+#          uri: http://${CANDIDATE_HOST}:${CANDIDATE_PORT}
+#          predicates:
+#            - Path=/candidats/**
+#          filters:
+#            - ManagerFilter
+
+        - id: auth-service
+          uri: http://localhost:8082
+          predicates:
+            - Path=/auth/**
+      discovery:
+        locator:
+          enabled: true
+  config:
+    import: optional:configserver:http://localhost:8888
+
+  application:
+    name: J2HB-GATEWAY
+  datasource:
+    url: jdbc:mysql://localhost:3306/J2HB?createDatabaseIfNotExist=true
+    username: root
+    password: ham147532@
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: none
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+    database: mysql
+    database-platform: org.hibernate.dialect.MySQL8Dialect
+eureka:
+  instance:
+    hostname: localhost
+  client:
+    service-url:
+      defaultZone: http://${eureka.instance.hostname}:8761/eureka
+server:
+  port: 8080
+debug: false
+
+

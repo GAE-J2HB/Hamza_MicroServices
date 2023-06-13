@@ -1,0 +1,74 @@
+spring:
+  cloud:
+    gateway:
+      routes:
+        - id: auth-service
+          uri: http://${AUTH_HOST}:${AUTH_PORT}
+          predicates:
+            - Path=/e/**
+          filters:
+            - AuthenticationFilter
+
+        - id: exam-service
+          uri: http://${EXAM_HOST}:${EXAM_PORT}
+          predicates:
+            - Path=/e/{somenumber/exams/**
+          filters:
+            - ManagerFilter
+
+        - id: course-service
+          uri: http://${COURSE_HOST}:${COURSE_PORT}
+          predicates:
+            - Path=/courses/**
+          filters:
+            - ManagerFilter
+
+        - id: candidate-service
+          uri: http://${CANDIDATE_HOST}:${CANDIDATE_PORT}
+          predicates:
+            - Path=/candidats/**
+          filters:
+            - ManagerFilter
+
+        - id: auth-service
+          uri: http://${AUTH_HOST}:${AUTH_PORT}
+          predicates:
+            - Path=/auth/**
+
+        - id: configuration-service
+          uri: http://${CONFIG_HOST}:${CONFIG_PORT}
+          predicates:
+            - Path=/e/{somenumber}/configurations/**
+
+      discovery:
+        locator:
+          enabled: true
+  config:
+    import: optional:configserver:http://localhost:8888
+
+  application:
+    name: J2HB-GATEWAY
+  datasource:
+    url: jdbc:mysql://${DB_HOST}:${DB_PORT}/${DB_NAME}?createDatabaseIfNotExist=true
+    username: ${DB_USER}
+    password: ${DB_PASS}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: none
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+    database: mysql
+    database-platform: org.hibernate.dialect.MySQL8Dialect
+eureka:
+  client:
+    service-url:
+      defaultZone: http://${EUREKA_HOST}:${EUREKA_PORT}/eureka/
+    register-with-eureka: false
+server:
+  port: ${GATEWAY_PORT}
+debug: ${DEBUG}
+
+

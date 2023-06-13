@@ -1,0 +1,98 @@
+version: "3"
+
+services:
+  auth-service:
+    container_name: auth-service
+    image: auth-service:latest
+    ports:
+      - "8082:8080"
+    environment:
+    - DB_HOST=mysql-docker
+    - DB_PORT=3306
+    - DB_USER=root
+    - DB_PASS=ham147532@
+    - DB_NAME=J2HB
+    - DEBUG=false
+    - UPLOAD_PATH=/home/darkseid/Pictures/Testing/
+    - SERVER_PORT=8082
+    - EUREKA_HOST=discovery-service
+    - EUREKA_PORT=8761
+    networks:
+      - j2hb-net
+    depends_on:
+      - gateway-service
+
+  exam-service:
+    container_name: exam-service
+    image: exam-service:latest
+    ports:
+      - "8081:8080"
+    environment:
+    - DB_HOST=mysql-docker
+    - DB_PORT=3306
+    - DB_USER=root
+    - DB_PASS=ham147532@
+    - DB_NAME=J2HB
+    - DEBUG=false
+    - SERVER_PORT=8081
+    - AUTH_SEVICE_HOST=auth-service
+    - AUTH_SEVICE_PORT=8082
+    - EUREKA_HOST=discovery-service
+    - EUREKA_PORT=8761
+    networks:
+      - j2hb-net
+    depends_on:
+      - gateway-service
+
+  gateway-service:
+    container_name: gateway-service
+    image: gateway-service:latest
+    ports:
+      - "8080:8080"
+    environment:
+    - DB_HOST=mysql-docker
+    - DB_PORT=3306
+    - DB_USER=root
+    - DB_PASS=ham147532@
+    - DB_NAME=J2HB
+    - DEBUG=false
+    - AUTH_HOST=auth-service
+    - AUTH_PORT=8082
+    - EXAM_HOST=exam-service
+    - EXAM_PORT=8081
+    - EUREKA_HOST=discovery-service
+    - EUREKA_PORT=8761
+    - GATEWAY_PORT=8080
+    networks:
+      - j2hb-net
+    depends_on:
+      - mysql-docker
+  
+  discovery-service:
+    container_name: discovery-service
+    image: discovery-service:latest
+    ports:
+      - "8761:8761"
+    networks:
+      - j2hb-net
+    depends_on:
+      - mysql-docker
+      
+  mysql-docker:
+    container_name: mysql-docker
+    image: mysql:latest
+    environment:
+      - MYSQL_ROOT_PASSWORD=ham147532@
+      - MYSQL_DATABASE=J2HB
+      - MYSQL_USER=darkseid
+      - MYSQL_PASSWORD=ham147532@
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./mysql:/var/lib/mysql
+    networks:
+      - j2hb-net
+
+networks:
+  j2hb-net:
+      driver: bridge

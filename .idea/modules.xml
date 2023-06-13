@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/auth-service/auth.iml" filepath="$PROJECT_DIR$/auth-service/auth.iml" />
+      <module fileurl="file://$PROJECT_DIR$/exam-service/exam-managment.iml" filepath="$PROJECT_DIR$/exam-service/exam-managment.iml" />
+      <module fileurl="file://$PROJECT_DIR$/j2hb-api-gateway/j2hb-gateway.iml" filepath="$PROJECT_DIR$/j2hb-api-gateway/j2hb-gateway.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/micro-services.iml" filepath="$PROJECT_DIR$/.idea/micro-services.iml" />
+    </modules>
+  </component>
+</project>
