@@ -3,45 +3,44 @@ spring:
     gateway:
       routes:
         - id: exam-service
-          uri: http://${EXAM_HOST}:${EXAM_PORT}
+          uri: http://localhost:8081
           predicates:
             - Path=/e/{somenumber}/exams/**
           filters:
             - ManagerFilter
 
         - id: configuration-service
-          uri: http://${CONFIG_HOST}:${CONFIG_PORT}
+          uri: http://localhost:8083
           predicates:
             - Path=/e/{somenumber}/configurations/**
           filters:
             - ManagerFilter
 
         - id: auth-service
-          uri: http://${AUTH_HOST}:${AUTH_PORT}
+          uri: http://localhost:8082
           predicates:
             - Path=/e/**
           filters:
             - AuthenticationFilter
 
-        - id: course-service
-          uri: http://${COURSE_HOST}:${COURSE_PORT}
-          predicates:
-            - Path=/cours/**
-          filters:
-            - ManagerFilter
-
-        - id: candidate-service
-          uri: http://${CANDIDATE_HOST}:${CANDIDATE_PORT}
-          predicates:
-            - Path=/candidats/**
-          filters:
-            - ManagerFilter
+        #        - id: course-service
+        #          uri: http://${COURSE_HOST}:${COURSE_PORT}
+        #          predicates:
+        #            - Path=/cours/**
+        #          filters:
+        #            - ManagerFilter
+        #
+        #        - id: candidate-service
+        #          uri: http://${CANDIDATE_HOST}:${CANDIDATE_PORT}
+        #          predicates:
+        #            - Path=/candidats/**
+        #          filters:
+        #            - ManagerFilter
 
         - id: auth-service
-          uri: http://${AUTH_HOST}:${AUTH_PORT}
+          uri: http://localhost:8082
           predicates:
             - Path=/auth/**
-
       discovery:
         locator:
           enabled: true
@@ -51,9 +50,9 @@ spring:
   application:
     name: J2HB-GATEWAY
   datasource:
-    url: jdbc:mysql://${DB_HOST}:${DB_PORT}/${DB_NAME}?createDatabaseIfNotExist=true
-    username: ${DB_USER}
-    password: ${DB_PASS}
+    url: jdbc:mysql://localhost:3306/J2HB?createDatabaseIfNotExist=true
+    username: root
+    password: ham147532@
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     hibernate:
@@ -64,15 +63,14 @@ spring:
         format_sql: true
     database: mysql
     database-platform: org.hibernate.dialect.MySQL8Dialect
-
 eureka:
   instance:
-    hostname: ${EUREKA_HOST}
+    hostname: localhost
   client:
     service-url:
-      defaultZone: http://${eureka.instance.hostname}:${EUREKA_PORT}/eureka
+      defaultZone: http://${eureka.instance.hostname}:8761/eureka
 server:
-  port: ${GATEWAY_PORT}
-debug: ${DEBUG}
+  port: 8080
+debug: false
 
 
