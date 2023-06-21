@@ -7,8 +7,8 @@ ENV DB_HOST=mysql-docker \
      DB_NAME=J2HB \
      DEBUG=true \
      SERVER_PORT=8081 \
-     AUTH_SEVICE_HOST=localhost \
-     AUTH_SEVICE_PORT=8082 \
+     AUTH_HOST=localhost \
+     AUTH_PORT=8082 \
      EUREKA_HOST=localhost \
      EUREKA_PORT=8761
 ADD target/exam-managment-0.0.1-SNAPSHOT.jar exam-managment.jar

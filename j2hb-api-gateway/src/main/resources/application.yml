@@ -74,5 +74,3 @@ eureka:
 server:
   port: ${GATEWAY_PORT}
 debug: ${DEBUG}
-
-

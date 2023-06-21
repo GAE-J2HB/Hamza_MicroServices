@@ -1,7 +1,6 @@
 create table if not exists _auto_ecole
 (
-    auto_ecole_id     bigint       not null
-        primary key,
+    auto_ecole_id     bigint       not null,
     adresse           varchar(255) null,
     agrement          varchar(255) null,
     date_autorisation date         null,
@@ -20,28 +19,19 @@ create table if not exists _auto_ecole
     pays              varchar(255) null,
     tel               varchar(10)  null,
     tva               double       not null,
-    ville             varchar(255) null
-);
-
-create table if not exists _auto_ecole_seq
-(
-    next_val bigint null
+    ville             varchar(255) null,
+    primary key (auto_ecole_id)
 );
 
 create table if not exists _users
 (
-    user_id    bigint       not null
-        primary key,
+    user_id    bigint       not null,
     email      varchar(255) null,
     first_name varchar(255) null,
     last_name  varchar(255) null,
     password   varchar(255) null,
-    role       varchar(255) null
-);
-
-create table if not exists _users_seq
-(
-    next_val bigint null
+    role       varchar(255) null,
+    primary key (user_id)
 );
 
 create table if not exists auto_ecole_user
@@ -56,44 +46,33 @@ create table if not exists auto_ecole_user
 
 create table if not exists categorie_depense
 (
-    id            bigint       not null
-        primary key,
+    id            bigint       not null,
     auto_ecole_id bigint       null,
     description   varchar(255) null,
     libelle       varchar(255) null,
     type_depense  varchar(255) not null,
+    primary key (id),
     constraint FK_categorie_depense_auto_ecole_id
         foreign key (auto_ecole_id) references _auto_ecole (auto_ecole_id)
 );
 
-create table if not exists categorie_depense_seq
-(
-    next_val bigint null
-);
-
 create table if not exists categories
 (
-    nom           varchar(255) not null
-        primary key,
+    nom           varchar(255) not null,
     moyen         int          not null,
     created_at    timestamp    null,
     updated_at    timestamp    null,
     auto_ecole_id bigint       null,
     description   varchar(255) null,
     nbr_qst       int          null,
+    primary key (nom),
     constraint FK_categories_auto_ecole_id
         foreign key (auto_ecole_id) references _auto_ecole (auto_ecole_id)
 );
 
-create table if not exists exam_seq
-(
-    next_val bigint null
-);
-
 create table if not exists moniteurs
 (
-    cin           varchar(255) not null
-        primary key,
+    cin           varchar(255) not null,
     nom           varchar(255) not null,
     prenom        varchar(255) not null,
     categories    text         not null,
@@ -101,6 +80,7 @@ create table if not exists moniteurs
     updated_at    timestamp    null,
     type          varchar(15)  null,
     id_auto_ecole bigint       not null,
+    primary key (cin),
     constraint FK_moniteurs_auto_ecole_id
         foreign key (id_auto_ecole) references _auto_ecole (auto_ecole_id)
 );
@@ -143,26 +123,21 @@ create table if not exists courtheos
 
 create table if not exists token
 (
-    id         bigint       not null
-        primary key,
+    id         bigint       not null,
     expired    bit          not null,
     revoked    bit          not null,
     token      varchar(255) null,
     token_type varchar(255) null,
     user_id    bigint       null,
+    primary key (id),
     constraint FKitpc2cx3eub3b0cvcakffdc3q
         foreign key (user_id) references _users (user_id)
 );
 
-create table if not exists token_seq
-(
-    next_val bigint null
-);
 
 create table if not exists vehicules
 (
-    matricule     varchar(255) not null
-        primary key,
+    matricule     varchar(255) not null,
     fournisseur   varchar(255) not null,
     marque        varchar(255) not null,
     midele        varchar(255) not null,
@@ -170,14 +145,14 @@ create table if not exists vehicules
     created_at    timestamp    null,
     updated_at    timestamp    null,
     id_auto_ecole bigint       not null,
+    primary key (matricule),
     constraint FK_vehicules_auto_ecole_id
         foreign key (id_auto_ecole) references _auto_ecole (auto_ecole_id)
 );
 
 create table if not exists condidats
 (
-    cin             varchar(255) not null
-        primary key,
+    cin             varchar(255) not null,
     nom             varchar(255) not null,
     prenom          varchar(255) not null,
     categorie       varchar(255) not null,
@@ -204,6 +179,7 @@ create table if not exists condidats
     archived        tinyint(1)   null,
     montant         double       null,
     id_auto_ecole   bigint       not null,
+    primary key (cin),
     constraint cin
         unique (cin),
     constraint id
@@ -346,8 +322,7 @@ create table if not exists court_condidats
 
 create table if not exists exam
 (
-    id            bigint       not null
-        primary key,
+    id            bigint       not null,
     categorie     varchar(255) null,
     date_depot    date         null,
     date_examen   date         null,
@@ -356,6 +331,7 @@ create table if not exists exam
     note          int          not null,
     resultat      bit          not null,
     type          varchar(255) null,
+    primary key (id),
     constraint FK_exam_auto_ecole_id
         foreign key (id_auto_ecole) references _auto_ecole (auto_ecole_id),
     constraint FK_exam_candidate_id

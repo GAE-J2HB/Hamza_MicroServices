@@ -5,7 +5,7 @@ services:
     container_name: auth-service
     image: auth-service:latest
     ports:
-      - "8082:8080"
+      - "8082:8082"
     environment:
     - DB_HOST=mysql-docker
     - DB_PORT=3306
@@ -13,7 +13,7 @@ services:
     - DB_PASS=ham147532@
     - DB_NAME=J2HB
     - DEBUG=false
-    - UPLOAD_PATH=/home/darkseid/Pictures/Testing/
+    - UPLOAD_PATH=/home/darkseid/Pictures/Test/
     - SERVER_PORT=8082
     - EUREKA_HOST=discovery-service
     - EUREKA_PORT=8761
@@ -26,7 +26,7 @@ services:
     container_name: exam-service
     image: exam-service:latest
     ports:
-      - "8081:8080"
+      - "8081:8081"
     environment:
     - DB_HOST=mysql-docker
     - DB_PORT=3306
@@ -35,8 +35,8 @@ services:
     - DB_NAME=J2HB
     - DEBUG=false
     - SERVER_PORT=8081
-    - AUTH_SEVICE_HOST=auth-service
-    - AUTH_SEVICE_PORT=8082
+    - AUTH_HOST=auth-service
+    - AUTH_PORT=8082
     - EUREKA_HOST=discovery-service
     - EUREKA_PORT=8761
     networks:
@@ -44,6 +44,28 @@ services:
     depends_on:
       - gateway-service
 
+  config-service:
+    container_name: config-service
+    image: config-service:latest
+    ports:
+      - "8083:8083"
+    environment:
+    - DB_HOST=mysql-docker
+    - DB_PORT=3306
+    - DB_NAME=J2HB
+    - DB_USER=root
+    - DB_PASS=ham147532@
+    - DEBUG=true
+    - SERVER_PORT=8083
+    - AUTH_HOST=auth-service
+    - AUTH_PORT=8082
+    - EUREKA_HOST=discovery-service
+    - EUREKA_PORT=8761
+    networks:
+      - j2hb-net
+    depends_on:
+      - auth-service
+  
   gateway-service:
     container_name: gateway-service
     image: gateway-service:latest
@@ -60,24 +82,28 @@ services:
     - AUTH_PORT=8082
     - EXAM_HOST=exam-service
     - EXAM_PORT=8081
-    - EUREKA_HOST=discovery-service
+    - CONFIG_HOST=config-service
+    - CONFIG_PORT=8083
     - EUREKA_PORT=8761
+    - EUREKA_HOST=discovery-service
     - GATEWAY_PORT=8080
     networks:
       - j2hb-net
     depends_on:
-      - mysql-docker
+      - discovery-service
   
   discovery-service:
     container_name: discovery-service
     image: discovery-service:latest
     ports:
       - "8761:8761"
+    environment:
+      - DEBUG=false
     networks:
       - j2hb-net
     depends_on:
       - mysql-docker
-      
+
   mysql-docker:
     container_name: mysql-docker
     image: mysql:latest
@@ -90,6 +116,7 @@ services:
       - "3306:3306"
     volumes:
       - ./mysql:/var/lib/mysql
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
     networks:
       - j2hb-net
 

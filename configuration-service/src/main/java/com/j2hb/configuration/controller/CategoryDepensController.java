@@ -16,7 +16,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @Transactional
-@RequestMapping("/e")
+@RequestMapping("/e/{id_auto_ecole}")
 public class CategoryDepensController {
     private final CategoryDepensService categoryDepensService;
     private final SchoolClient schoolClient;
@@ -28,7 +28,7 @@ public class CategoryDepensController {
         return !schoolClient.isMember(id_auto_ecole, userEmail);
     }
 
-    @GetMapping("/{id_auto_ecole}/configurations/categories-depenses")
+    @GetMapping("/configurations/categories-depenses")
     public ResponseEntity<List<CategorieDepense>> getCategories(@PathVariable Long id_auto_ecole, HttpServletRequest request) {
         if (getResponse(id_auto_ecole, request)) {
             return ResponseEntity.status(403).build();
@@ -39,7 +39,7 @@ public class CategoryDepensController {
         return ResponseEntity.ok(categoryDepensService.getAllCategoriesDepenses(id_auto_ecole));
     }
 
-    @PostMapping("/{id_auto_ecole}/configurations/add-categorie-depense")
+    @PostMapping("/configurations/add-categorie-depense")
     public ResponseEntity<String> addCategory(HttpServletRequest request, @RequestBody CategoryDepenseRequest categorieDepense, @PathVariable Long id_auto_ecole) {
         if (getResponse(id_auto_ecole, request)) {
             return ResponseEntity.status(403).build();
@@ -47,7 +47,7 @@ public class CategoryDepensController {
         return ResponseEntity.ok(categoryDepensService.addCategoryDepense(categorieDepense, id_auto_ecole));
     }
 
-    @DeleteMapping("/{id_auto_ecole}/configurations/delete-categorie-depense/{id_category_depense}")
+    @DeleteMapping("/configurations/delete-categorie-depense/{id_category_depense}")
     public ResponseEntity<String> deleteCategory(HttpServletRequest request, @PathVariable long id_category_depense, @PathVariable Long id_auto_ecole) {
         if (getResponse(id_auto_ecole, request)) {
             return ResponseEntity.status(403).build();
@@ -55,7 +55,7 @@ public class CategoryDepensController {
         return ResponseEntity.ok(categoryDepensService.deleteCategoryDepense(id_category_depense));
     }
 
-    @PutMapping("/{id_auto_ecole}/configurations/update-categorie-depense/{id_category_depense}")
+    @PutMapping("/configurations/update-categorie-depense/{id_category_depense}")
     public ResponseEntity<String> updateCategory(HttpServletRequest request, @RequestBody CategoryDepenseRequest categorieDepense, @PathVariable Long id_auto_ecole, @PathVariable long id_category_depense) {
         if (getResponse(id_auto_ecole, request)) {
             return ResponseEntity.status(403).build();

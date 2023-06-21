@@ -7,9 +7,8 @@ ENV DB_HOST=mysql-docker \
      DB_PASS=ham147532@ \
      DEBUG=false \
      SERVER_PORT=8083 \
-     AUTH_HOST=localhost \
-     AUTH_PORT=8082 \
+     UPLOAD_PATH=/home/darkseid/Pictures/Test/ \
      EUREKA_HOST=localhost \
      EUREKA_PORT=8761
-ADD ../configuration-service/target/configuration-0.0.1-SNAPSHOT.jar config-service.jar
-ENTRYPOINT ["java", "-jar", "/auth.jar"]
+ADD target/auth-0.0.1-SNAPSHOT.jar auth-service.jar
+ENTRYPOINT ["java", "-jar", "/auth-service.jar"]
